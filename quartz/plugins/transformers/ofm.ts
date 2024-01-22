@@ -23,7 +23,6 @@ export interface Options {
   callouts: boolean
   mermaid: boolean
   parseTags: boolean
-  parseArrows: boolean
   parseBlockReferences: boolean
   enableInHtmlEmbed: boolean
   enableYouTubeEmbed: boolean
@@ -37,7 +36,6 @@ const defaultOptions: Options = {
   callouts: true,
   mermaid: true,
   parseTags: true,
-  parseArrows: true,
   parseBlockReferences: true,
   enableInHtmlEmbed: false,
   enableYouTubeEmbed: true,
@@ -112,8 +110,6 @@ function canonicalizeCallout(calloutName: string): keyof typeof callouts {
 }
 
 export const externalLinkRegex = /^https?:\/\//i
-
-export const arrowRegex = new RegExp(/-{1,2}>/, "g")
 
 // !?               -> optional embedding
 // \[\[             -> open brace
@@ -293,18 +289,6 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options> 
                 return {
                   type: "text",
                   value: "",
-                }
-              },
-            ])
-          }
-
-          if (opts.parseArrows) {
-            replacements.push([
-              arrowRegex,
-              (_value: string, ..._capture: string[]) => {
-                return {
-                  type: "html",
-                  value: `<span>&rarr;</span>`,
                 }
               },
             ])

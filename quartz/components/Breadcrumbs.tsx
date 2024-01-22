@@ -69,9 +69,9 @@ export default ((opts?: Partial<BreadcrumbOptions>) => {
       for (const file of allFiles) {
         if (file.slug?.endsWith("index")) {
           const folderParts = file.slug?.split("/")
-          // 2nd last to exclude the /index
-          const folderName = folderParts?.at(-2)
-          if (folderName) {
+          if (folderParts) {
+            // 2nd last to exclude the /index
+            const folderName = folderParts[folderParts?.length - 2]
             folderIndex.set(folderName, file)
           }
         }
@@ -104,14 +104,13 @@ export default ((opts?: Partial<BreadcrumbOptions>) => {
       }
 
       // Add current file to crumb (can directly use frontmatter title)
-      if (options.showCurrentPage && slugParts.at(-1) !== "index") {
+      if (options.showCurrentPage && slugParts.at(-1) === "") {
         crumbs.push({
           displayName: fileData.frontmatter!.title,
           path: "",
         })
       }
     }
-
     return (
       <nav class={`breadcrumb-container ${displayClass ?? ""}`} aria-label="breadcrumbs">
         {crumbs.map((crumb, index) => (
