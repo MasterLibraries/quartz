@@ -159,6 +159,14 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options> 
         })
       }
 
+      // do comments at text level
+      if (opts.comments) {
+        if (src instanceof Buffer) {
+          src = src.toString()
+        }
+        src.replace(commentRegex, "")
+      }
+
       // pre-transform wikilinks (fix anchors to things that may contain illegal syntax e.g. codeblocks, latex)
       if (opts.wikilinks) {
         if (src instanceof Buffer) {
@@ -289,6 +297,18 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options> 
                 return {
                   type: "text",
                   value: "",
+                }
+              },
+            ])
+          }
+
+          if (opts.parseArrows) {
+            replacements.push([
+              arrowRegex,
+              (_value: string, ..._capture: string[]) => {
+                return {
+                  type: "html",
+                  value: `<span>&rarr;</span>`,
                 }
               },
             ])
