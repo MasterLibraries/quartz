@@ -9,8 +9,8 @@ const config: QuartzConfig = {
     analytics: {
       provider: "plausible",
     },
-    baseUrl: "ryken.cloud",
-    ignorePatterns: ["Private", "Templates", "CloudNative", "ProgramLanguage", "TmpFiles", "WeeklySummary", "WorkNotes", ".obsidian"],
+    baseUrl: "codingryken.eu.org",
+    ignorePatterns: ["Private", "Templates", "studyNotes"],
     defaultDateType: "modified",
     theme: {
       typography: {
