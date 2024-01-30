@@ -1,6 +1,7 @@
 import { formatDate, getDate } from "./Date"
 import { QuartzComponentConstructor, QuartzComponentProps } from "./types"
 import readingTime from "reading-time"
+import { classNames } from "../util/lang"
 
 export default (() => {
   function ContentMetadata({ cfg, fileData, displayClass }: QuartzComponentProps) {
@@ -13,8 +14,13 @@ export default (() => {
         segments.push(formatDate(getDate(cfg, fileData)!, cfg.locale))
       }
 
-      segments.push(timeTaken)
-      return <p class={`content-meta ${displayClass ?? ""}`}>{segments.join(", ")}</p>
+      // Display reading time if enabled
+      if (options.showReadingTime) {
+        const { text: timeTaken, words: _words } = readingTime(text)
+        segments.push(timeTaken)
+      }
+
+      return <p class={classNames(displayClass, "content-meta")}>{segments.join(", ")}</p>
     } else {
       return null
     }
