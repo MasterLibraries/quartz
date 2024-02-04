@@ -9,8 +9,9 @@ const config: QuartzConfig = {
     analytics: {
       provider: "plausible",
     },
+    locale: "en-US",
     baseUrl: "codingryken.eu.org",
-    ignorePatterns: ["Private", "Templates", "studyNotes"],
+    ignorePatterns: ["Private", "Templates", "studyNotes", ".obsidian"],
     defaultDateType: "modified",
     theme: {
       typography: {
