@@ -72,6 +72,17 @@ const calloutMapping = {
   cite: "quote",
 } as const
 
+const arrowMapping: Record<string, string> = {
+  "->": "&rarr;",
+  "-->": "&rArr;",
+  "=>": "&rArr;",
+  "==>": "&rArr;",
+  "<-": "&larr;",
+  "<--": "&lArr;",
+  "<=": "&lArr;",
+  "<==": "&lArr;",
+}
+
 function canonicalizeCallout(calloutName: string): keyof typeof calloutMapping {
   const normalizedCallout = calloutName.toLowerCase() as keyof typeof calloutMapping
   // if callout is not recognized, make it a custom one
@@ -80,7 +91,7 @@ function canonicalizeCallout(calloutName: string): keyof typeof calloutMapping {
 
 export const externalLinkRegex = /^https?:\/\//i
 
-export const arrowRegex = new RegExp(/-{1,2}>/, "g")
+export const arrowRegex = new RegExp(/(-{1,2}>|={1,2}>|<-{1,2}|<={1,2})/, "g")
 
 // !?                -> optional embedding
 // \[\[              -> open brace
@@ -282,10 +293,12 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options> 
           if (opts.parseArrows) {
             replacements.push([
               arrowRegex,
-              (_value: string, ..._capture: string[]) => {
+              (value: string, ..._capture: string[]) => {
+                const maybeArrow = arrowMapping[value]
+                if (maybeArrow === undefined) return SKIP
                 return {
                   type: "html",
-                  value: `<span>&rarr;</span>`,
+                  value: `<span>${maybeArrow}</span>`,
                 }
               },
             ])
